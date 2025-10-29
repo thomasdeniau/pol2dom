@@ -64,7 +64,7 @@ def tex2pdf(tex_file):
                               shell=False)
     if pdflatex.returncode != 0:
         logging.error(' '.join(command_as_list) + '\n'
-                      + pdflatex.stdout.decode("utf-8"))
+                      + pdflatex.stdout.decode("utf-8", errors='ignore'))
         logging.error('The pdflatex command returned an error.')
         exit(1)
 
