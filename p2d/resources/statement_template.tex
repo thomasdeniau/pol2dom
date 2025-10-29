@@ -11,6 +11,8 @@
 
 \problemheader
 
+\let\problemfooter\undefined
+
 ??LEGEND??
 
 \section*{Input}
@@ -24,3 +26,14 @@
 
 \section*{Samples}
 ??SAMPLES??
+
+\ifdefined\problemfooter
+ \begin{tiny}
+  \begin{flushleft}
+	\vspace{1cm}\noindent
+\problemfooter
+    \end{flushleft}
+  \end{tiny}
+\fi  
+
+  
