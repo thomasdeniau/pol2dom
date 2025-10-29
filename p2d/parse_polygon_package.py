@@ -121,6 +121,11 @@ def parse_problem_from_polygon(polygon):
         statement_json = json.load(f)
         for section in ['legend', 'input', 'output', 'interaction', 'tutorial']:
             content = statement_json[section]
+            # Override with the local file if it exists to help with local testing of modifications
+            section_tex = pol_path('statement-sections', 'english', section + '.tex')
+            if os.path.exists(section_tex):
+                with open(section_tex, "rt") as f:
+                    content = f.read()
             problem['statement'][section] = content if content is not None else ''
         explanations = parse_samples_explanations(statement_json['notes'])
 
