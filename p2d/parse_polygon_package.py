@@ -42,6 +42,13 @@ def parse_samples_explanations(notes):
     assert(test_id == -1)
     return explanations
 
+def local_section_content(pol_path, section):
+    section_tex = pol_path('statement-sections', 'english', section + '.tex')
+    content = None
+    if os.path.exists(section_tex):
+        with open(section_tex, "rt") as f:
+            content = f.read()
+    return content
 
 # Parsing a Polygon package to a Dictionary object.
 #   polygon = path of the root of the Polygon package directory
@@ -122,12 +129,15 @@ def parse_problem_from_polygon(polygon):
         for section in ['legend', 'input', 'output', 'interaction', 'tutorial']:
             content = statement_json[section]
             # Override with the local file if it exists to help with local testing of modifications
-            section_tex = pol_path('statement-sections', 'english', section + '.tex')
-            if os.path.exists(section_tex):
-                with open(section_tex, "rt") as f:
-                    content = f.read()
+            local_content = local_section_content(pol_path, section)
+            if local_content:
+                content = local_content
             problem['statement'][section] = content if content is not None else ''
-        explanations = parse_samples_explanations(statement_json['notes'])
+        notes = statement_json['notes']
+        local_notes = local_section_content(pol_path, 'notes')
+        if local_notes:
+            notes = local_notes
+        explanations = parse_samples_explanations(notes)
 
         sample_id = 1
         samples = []
